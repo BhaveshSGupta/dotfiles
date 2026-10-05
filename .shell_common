@@ -1,0 +1,46 @@
+# Shared by ~/.zshrc and ~/.bashrc. Keep this POSIX-ish so both shells can read it.
+# Shell-specific things (prompt, plugins, zoxide/direnv hooks) stay in each rc file.
+
+# --- PATH / env ---
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"   # uv
+export OLLAMA_HOST="127.0.0.1:11436"                        # was 0.0.0.0 and not exported
+
+# --- nicer defaults (Ubuntu ships these as fdfind / batcat) ---
+alias fd='fdfind'
+alias ls='eza --icons'
+alias ll='eza -lah --icons'
+alias bat='batcat'                  # own command; `cat` stays the real cat for pipes/scripts
+
+# --- git (no blind `git add .` / `commit -m`; use `git add -p`, lazygit, or oh-my-zsh's ga/gcmsg) ---
+alias gs='git status'
+alias gp='git push'
+alias gl='git pull'
+alias gco='git checkout'
+alias gb='git branch'
+alias gd='git diff'
+alias gundo='git reset --soft HEAD~1'
+
+# --- pnpm ---
+alias dev='pnpm dev'
+alias build='pnpm build'
+alias lint='pnpm lint'
+alias t='pnpm test'                 # was `test`, which shadowed the shell builtin
+alias typecheck='pnpm tsc --noEmit'
+alias clean='pnpm clean && rm -rf node_modules'
+alias reinstall='rm -rf node_modules && pnpm install'
+
+# --- tmux ---
+alias ta='tmux attach -t'
+alias tn='tmux new -s'
+alias tl='tmux ls'
+
+# --- navigation ---
+alias ..='cd ..'
+alias ...='cd ../..'
+mkcd() { mkdir -p -- "$1" && cd -- "$1"; }
+
+# --- fzf: use fd, preview with bat ---
+export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_T_OPTS="--preview 'batcat -n --color=always --line-range :200 {}'"

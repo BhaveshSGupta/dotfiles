@@ -1,0 +1,38 @@
+# Default (work) identity lives in ~/.gitconfig-work, which is NOT tracked in this repo.
+[include]
+	path = ~/.gitconfig-work
+[core]
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[init]
+	defaultBranch = main
+[pull]
+	rebase = true
+[push]
+	autoSetupRemote = true
+[rerere]
+	enabled = true
+[diff]
+	colorMoved = default
+[merge]
+	conflictstyle = zdiff3
+[delta]
+	navigate = true
+	line-numbers = true
+	side-by-side = true
+
+[includeIf "gitdir:~/dotfiles/"]
+	path = ~/.gitconfig-personal
+
+# Work identity is the default above. Personal identity applies to:
+#  - any repo under ~/personal/
+#  - any repo whose remote is on the BhaveshSGupta account (ssh host aliases or https)
+[includeIf "gitdir:~/personal/"]
+	path = ~/.gitconfig-personal
+[includeIf "hasconfig:remote.*.url:git@github.com:BhaveshSGupta/**"]
+	path = ~/.gitconfig-personal
+[includeIf "hasconfig:remote.*.url:git@github-personal:BhaveshSGupta/**"]
+	path = ~/.gitconfig-personal
+[includeIf "hasconfig:remote.*.url:https://github.com/BhaveshSGupta/**"]
+	path = ~/.gitconfig-personal

@@ -16,8 +16,8 @@ HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
+HISTSIZE=100000
+HISTFILESIZE=100000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -116,7 +116,19 @@ if ! shopt -oq posix; then
   fi
 fi
 
+. "$HOME/.local/bin/env"
+
+export PATH="$HOME/.local/bin:$PATH"
+
+# Added by Antigravity CLI installer
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-. "$HOME/.cargo/env"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# Shared aliases/env live in ~/.shell_common (also sourced by ~/.zshrc)
+[ -f ~/.shell_common ] && . ~/.shell_common
+command -v zoxide >/dev/null && eval "$(zoxide init bash)"
+command -v direnv >/dev/null && eval "$(direnv hook bash)"
